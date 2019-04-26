@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    tools:context=".RestaurantDetailActivity">
+
+    <TextView
+        android:id="@+id/rname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textSize="25dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Restauant Name"/>
+
+    <TextView
+        android:id="@+id/raddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:textSize="18dp"
+        android:textColor="#000000"
+        android:text="Restaurant Address"/>
+
+    <RatingBar
+        android:id="@+id/rrating"
+        android:layout_width="239dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:numStars="5"
+        android:isIndicator="true" />
+
+    <Button
+        android:id="@+id/direction"
+        android:layout_width="154dp"
+        android:layout_height="59dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#4169e1"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="20dp"
+        android:text="Direction" />
+
+    <TextView
+        android:id="@+id/menu_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="15dp"
+        android:text="Menu:"
+        android:textSize="18dp"
+        android:textStyle="bold" />
+
+    <ListView
+        android:id="@+id/menulist"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_marginLeft="20dp"></ListView>
+
+
+
+</LinearLayout>
