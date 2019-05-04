@@ -1,5 +1,5 @@
 package com.example.a.halalfoodworldwide.Helper;
 
 public class APIUrl {
-    public static String Url = "http://192.168.1.7";
+    public static String Url = "http://192.168.10.6";
 }

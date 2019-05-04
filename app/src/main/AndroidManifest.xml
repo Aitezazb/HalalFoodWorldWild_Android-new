@@ -22,7 +22,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UserAllRatingActivity" android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
+        <activity android:name=".UserAllTagging"></activity>
+        <activity
+            android:name=".UserAllRatingActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
         <activity android:name=".TagActivity" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".LoginActivity" />
