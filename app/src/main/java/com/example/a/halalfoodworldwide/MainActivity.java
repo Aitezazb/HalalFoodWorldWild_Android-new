@@ -252,7 +252,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                         ShowUserLogPopUp();
                         return false;
                     }else{
-
+                        Intent userAllRatingIntent = new Intent(MainActivity.this,UserAllTagging.class);
+                        startActivity(userAllRatingIntent);
+                        finish();
                     }
                     break;
                 }

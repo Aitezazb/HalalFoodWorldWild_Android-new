@@ -201,6 +201,9 @@ public class UserAllRatingActivity extends AppCompatActivity {
                     break;
                 }
                 case R.id.nav_tag:{
+                    Intent userAllRatingIntent = new Intent(UserAllRatingActivity.this,UserAllTagging.class);
+                    startActivity(userAllRatingIntent);
+                    finish();
                     break;
                 }
                 case R.id.nav_setting :{
