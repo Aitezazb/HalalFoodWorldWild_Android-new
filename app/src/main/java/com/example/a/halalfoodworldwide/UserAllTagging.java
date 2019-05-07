@@ -21,15 +21,21 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.a.halalfoodworldwide.Helper.APIUrl;
 import com.example.a.halalfoodworldwide.Helper.RatingItemAdapter;
+import com.example.a.halalfoodworldwide.Helper.TaggedRestaurantAdapter;
+import com.example.a.halalfoodworldwide.Models.ParseJSON;
 import com.example.a.halalfoodworldwide.Models.RatingListViewModel;
+import com.example.a.halalfoodworldwide.Models.TaggedRestaurants;
 import com.example.a.halalfoodworldwide.Models._User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserAllTagging extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     ListView taggingListView;
+
+    ArrayList<TaggedRestaurants> taggedRestaurantsArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,27 +59,27 @@ public class UserAllTagging extends AppCompatActivity {
 
     //Api request
     private void sendRequest(){
-        String url = APIUrl.Url + "/api/Ratings?userEmail=aitezazbilal95@gmail.com";
+        String url = APIUrl.Url + "/api/TaggedPlaces?email=aitezazbilal95@gmail.com";
         StringRequest stringRequest = new StringRequest(Request.Method.GET,url
                 , new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-//                ResponseToModel(response);
-//                //RatingItemAdapter ratingItemAdapter = new RatingItemAdapter(this,restaurantName,rating);
-//
-//                final RatingItemAdapter ratingItemAdapter = new RatingItemAdapter(UserAllRatingActivity.this,ratingListViewModels);
-//
-//                ratingListView.setAdapter(ratingItemAdapter);
-//
-//                ratingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                        RatingListViewModel ratingListViewModel = (RatingListViewModel)parent.getItemAtPosition(position);
-//                        ratingItemAdapter.remove(ratingListViewModel);
-//                        ratingItemAdapter.notifyDataSetChanged();
-//                        DeleteRestaurantRatingApiRequest(ratingListViewModel.getId());
-//                    }
-//                });
+                ResponseToModel(response);
+
+
+                final TaggedRestaurantAdapter taggedRestaurantAdapter = new TaggedRestaurantAdapter(UserAllTagging.this,taggedRestaurantsArrayList);
+
+                taggingListView.setAdapter(taggedRestaurantAdapter);
+
+              taggingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                   @Override
+                  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        TaggedRestaurants taggedRestaurantModel = (TaggedRestaurants)parent.getItemAtPosition(position);
+                       taggedRestaurantAdapter.remove(taggedRestaurantModel);
+                       taggedRestaurantAdapter.notifyDataSetChanged();
+                        DeleteTaggedRestaurantApiRequest(taggedRestaurantModel.getId());
+                    }
+                });
 
             }
         },
@@ -117,6 +123,64 @@ public class UserAllTagging extends AppCompatActivity {
         });
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
+
+    private void DeleteTaggedRestaurantApiRequest(String id){
+        String url = APIUrl.Url + "/api/TaggedPlaces?id="+id;
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE,url
+                , new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Toast.makeText(getApplicationContext(),"Removed! " ,Toast.LENGTH_LONG).show();
+
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Toast.makeText(getApplicationContext(),"error in response",Toast.LENGTH_LONG).show();
+                    }
+                })
+        {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers = new HashMap<String, String>();
+                String s = _User.getInstance().getToken();
+                headers.put("Authorization", "Bearer " + _User.getInstance().getToken());
+                return headers;
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+        stringRequest.setRetryPolicy(new RetryPolicy() {
+            @Override
+            public int getCurrentTimeout() {
+                return 50000;
+            }
+
+            @Override
+            public int getCurrentRetryCount() {
+                return 50000;
+            }
+
+            @Override
+            public void retry(VolleyError error) throws VolleyError {
+                Toast.makeText(getApplicationContext(),error.networkResponse.toString(),Toast.LENGTH_LONG);
+            }
+        });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+
+    }
+
+    private void ResponseToModel(String response){
+        ParseJSON taggedRestaurantParseJSON = new ParseJSON(response);
+        taggedRestaurantsArrayList = taggedRestaurantParseJSON.parseJSON_TaggedPlace();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener nav_Listener = new BottomNavigationView.OnNavigationItemSelectedListener() {

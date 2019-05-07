@@ -121,4 +121,33 @@ public class ParseJSON {
         return null;
     }
 
+    public ArrayList<TaggedRestaurants> parseJSON_TaggedPlace(){
+        JSONObject jsonObject=null;
+        try {
+
+            ArrayList<TaggedRestaurants> TaggedPlacesModel = new ArrayList<>();
+
+            //Getting all values of Api result
+            jsonObject = new JSONObject(json);
+
+            JSONArray taggedPlaceJsonModel = jsonObject.getJSONArray("_TaggingModels");
+
+            for (int i=0;i<taggedPlaceJsonModel.length();i++){
+                TaggedRestaurants TaggedPlaceModel = new TaggedRestaurants();
+                JSONObject Item = taggedPlaceJsonModel.getJSONObject(i);
+                TaggedPlaceModel.setId(Item.getString("id"));
+                TaggedPlaceModel.setRestaurantName(Item.getString("restaurantName"));
+                TaggedPlaceModel.setRestaurantAddress(Item.getString("restaurantAddress"));
+                TaggedPlaceModel.setCityName(Item.getString("cityName"));
+                TaggedPlacesModel.add(TaggedPlaceModel);
+            }
+
+            return TaggedPlacesModel;
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
