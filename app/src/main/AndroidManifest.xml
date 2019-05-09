@@ -22,7 +22,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UserAllTagging"  android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
+        <activity android:name=".TagNewRestaurant"></activity>
+        <activity
+            android:name=".UserAllTagging"
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
         <activity
             android:name=".UserAllRatingActivity"
             android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />

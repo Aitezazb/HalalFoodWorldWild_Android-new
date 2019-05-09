@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -37,6 +38,9 @@ public class UserAllTagging extends AppCompatActivity {
 
     ArrayList<TaggedRestaurants> taggedRestaurantsArrayList;
 
+    Button tagNewRestaurant;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +48,8 @@ public class UserAllTagging extends AppCompatActivity {
 
         //Getting references
         taggingListView = (ListView) findViewById(R.id.TagListView);
+        tagNewRestaurant = (Button) findViewById(R.id.TagNewRestaurantViewButton);
+        tagNewRestaurant.setOnClickListener(tagNewRestaurantViewButtonListener);
 
         //bottom menu
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomMenu);
@@ -56,6 +62,14 @@ public class UserAllTagging extends AppCompatActivity {
         //Get all the tagged restaurant.
         sendRequest();
     }
+
+    View.OnClickListener tagNewRestaurantViewButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent tagNewRestaurantIntent = new Intent(UserAllTagging.this,TagNewRestaurant.class);
+            startActivity(tagNewRestaurantIntent);
+        }
+    };
 
     //Api request
     private void sendRequest(){
