@@ -1,9 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".TagNewRestaurant">
+    <fragment
+        android:id="@+id/TagNewRestaurantMap"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:layout_above="@+id/bottomMenu"
+        />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Restaurant Name: "
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="17dp"
+        android:textColor="#000000"/>
 
-</android.support.constraint.ConstraintLayout>
+    <EditText
+        android:id="@+id/TagNewRestaurantName"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:hint="Restaurant Name"
+        android:layout_marginLeft="25dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Restaurant Address: "
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:textSize="17dp"
+        android:textColor="#000000"/>
+
+    <EditText
+        android:id="@+id/TagNewRestaurantAddress"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:hint="Restaurant Address"
+        android:layout_marginLeft="25dp"/>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+        <Button
+            android:id="@+id/TagNewRestaurantBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorDarkGrey"
+            android:layout_marginStart="10dp"
+            android:text="BACK"/>
+        <Button
+            android:id="@+id/TagNewRestaurantSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#4169e1"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="10dp"
+            android:text="Save"/>
+
+    </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
