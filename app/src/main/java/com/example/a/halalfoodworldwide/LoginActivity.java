@@ -3,9 +3,13 @@ package com.example.a.halalfoodworldwide;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -25,13 +29,18 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class LoginActivity extends AppCompatActivity {
 
 
-    private EditText ET_email, ET_password;
+
+    private EditText emailEditText, passwordEditText;
+
+    private String email,password;
 
     private Button loginBtn, signUpBtn;
 
+    private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +50,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void getAllUIReferences(){
-        ET_email = (EditText) findViewById(R.id.loginEmail);
-        ET_password = (EditText) findViewById(R.id.loginPassword);
+        emailEditText = (EditText) findViewById(R.id.loginEmail);
+        passwordEditText = (EditText) findViewById(R.id.loginPassword);
+
+        progressBar = (ProgressBar) findViewById(R.id.LoginProgressBar);
 
         loginBtn = (Button) findViewById(R.id.login_btn);
         signUpBtn = (Button) findViewById(R.id.loginSignUp_btn);
@@ -51,20 +62,37 @@ public class LoginActivity extends AppCompatActivity {
         signUpBtn.setOnClickListener(signUpBtn_Listener);
     }
 
+    private void removeUserInteraction()
+    {
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private void AddUserInteraction(){
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
     //login click listener
     private View.OnClickListener loginBtn_Listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(isEmailValid(ET_email.getText().toString()) && ET_password.getText().toString() != null){
-
-            }sendRequest();
+            if(isEmailValid(emailEditText.getText().toString()) && !TextUtils.isEmpty(passwordEditText.getText().toString())){
+                email = emailEditText.getText().toString();
+                password = passwordEditText.getText().toString();
+                progressBar.setVisibility(View.VISIBLE);
+                removeUserInteraction();
+                sendRequest();
+            }
+            else{
+                Toast.makeText(LoginActivity.this,"Please fill password field correctly",Toast.LENGTH_LONG).show();
+            }
 
         }
     };
 
     private boolean isEmailValid(CharSequence email) {
         boolean s = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-        if(!s) Toast.makeText(LoginActivity.this,"wrong email",Toast.LENGTH_LONG)
+        if(!s) Toast.makeText(LoginActivity.this,"Please fill email field correctly",Toast.LENGTH_LONG)
                 .show();
 
         return s;
@@ -94,6 +122,14 @@ public class LoginActivity extends AppCompatActivity {
 
                         try {
                             SetToken(response);
+                            if(_User.getInstance().getToken() == null) {
+                                progressBar.setVisibility(View.GONE);
+                                AddUserInteraction();
+                                Toast.makeText(getApplicationContext(), "Incorrect username or password", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            progressBar.setVisibility(View.GONE);
+                            AddUserInteraction();
                             Intent mainActivityIntent = new Intent(LoginActivity.this,MainActivity.class);
                             startActivity(mainActivityIntent);
                             finish();
@@ -105,16 +141,17 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-                        Toast.makeText(LoginActivity.this,"error in response",Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.GONE);
+                        AddUserInteraction();
+                        Toast.makeText(LoginActivity.this,"Incorrect UserName or password or try later",Toast.LENGTH_LONG).show();
                     }
                 })
         {
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
-                params.put("username","aitezazbilal95@gmail.com");
-                params.put("password","Abc@123");
+                params.put("username",email);
+                params.put("password",password);
                 params.put("grant_type","password");
                 return params;
             }
