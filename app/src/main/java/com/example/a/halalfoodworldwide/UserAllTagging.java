@@ -1,8 +1,10 @@
 package com.example.a.halalfoodworldwide;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -39,6 +41,7 @@ public class UserAllTagging extends AppCompatActivity {
     ListView taggingListView;
     private ProgressBar progressBar;
 
+    //private AlertDialog.Builder deleteAlertDialog;
 
     ArrayList<TaggedRestaurants> taggedRestaurantsArrayList;
 
@@ -94,11 +97,24 @@ public class UserAllTagging extends AppCompatActivity {
 
               taggingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                    @Override
-                  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        TaggedRestaurants taggedRestaurantModel = (TaggedRestaurants)parent.getItemAtPosition(position);
-                       taggedRestaurantAdapter.remove(taggedRestaurantModel);
-                       taggedRestaurantAdapter.notifyDataSetChanged();
-                        DeleteTaggedRestaurantApiRequest(taggedRestaurantModel.getId());
+                  public void onItemClick(final AdapterView<?> parent, View view,final int position, long id) {
+
+                       //Verifying if user wants to delete the item or not
+                      new AlertDialog.Builder(UserAllTagging.this)
+                               .setTitle("Delete")
+                               .setMessage("Are you sure? This cannot be undone")
+                               .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                   @Override
+                                   public void onClick(DialogInterface dialog, int which) {
+                                       TaggedRestaurants taggedRestaurantModel = (TaggedRestaurants)parent.getItemAtPosition(position);
+                                       taggedRestaurantAdapter.remove(taggedRestaurantModel);
+                                       taggedRestaurantAdapter.notifyDataSetChanged();
+                                       DeleteTaggedRestaurantApiRequest(taggedRestaurantModel.getId());
+                                   }
+                               })
+                               .setNegativeButton("No",null).create().show();
+
+
                     }
                 });
 

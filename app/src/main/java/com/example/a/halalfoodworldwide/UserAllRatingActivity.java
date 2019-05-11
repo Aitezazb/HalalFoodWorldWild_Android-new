@@ -1,8 +1,10 @@
 package com.example.a.halalfoodworldwide;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -97,11 +99,20 @@ public class UserAllRatingActivity extends AppCompatActivity {
 
                 ratingListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        RatingListViewModel ratingListViewModel = (RatingListViewModel)parent.getItemAtPosition(position);
-                        ratingItemAdapter.remove(ratingListViewModel);
-                        ratingItemAdapter.notifyDataSetChanged();
-                        DeleteRestaurantRatingApiRequest(ratingListViewModel.getId());
+                    public void onItemClick(final AdapterView<?> parent, View view,final int position, long id) {
+                        new AlertDialog.Builder(UserAllRatingActivity.this).setTitle("Delete")
+                                .setMessage("Are you sure? This cannot be undone")
+                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        RatingListViewModel ratingListViewModel = (RatingListViewModel)parent.getItemAtPosition(position);
+                                        ratingItemAdapter.remove(ratingListViewModel);
+                                        ratingItemAdapter.notifyDataSetChanged();
+                                        DeleteRestaurantRatingApiRequest(ratingListViewModel.getId());
+                                    }
+                                })
+                                .setNegativeButton("No",null).create().show();
+
                     }
                 });
 
