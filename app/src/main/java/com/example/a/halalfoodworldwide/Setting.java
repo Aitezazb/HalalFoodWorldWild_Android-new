@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.example.a.halalfoodworldwide.Models._User;
 
+import org.w3c.dom.Text;
+
 public class Setting extends AppCompatActivity {
 
     //AlertDialog Box
@@ -37,6 +39,9 @@ public class Setting extends AppCompatActivity {
         //bottom menu
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.SettingbottomMenu);
 
+        TextView email = (TextView) findViewById(R.id.SettingEmail);
+
+        email.setText(_User.getEmail());
 
         //Assigning click listener
         termAndConditionTextView.setOnClickListener(termAndConditionListener);
