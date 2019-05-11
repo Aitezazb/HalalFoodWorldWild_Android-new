@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -19,7 +21,9 @@ import com.example.a.halalfoodworldwide.Helper.APIUrl;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    EditText ET_email, ET_password, ET_confirmPassword;
+    EditText emailEditText, passwordEditText, confirmPasswordEditText;
+
+    ProgressBar progressBar;
 
     Button login,SignUp;
 
@@ -36,9 +40,10 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void getAllUIReferences() {
-        ET_email = (EditText) findViewById(R.id.signUpEmail);
-        ET_password = (EditText) findViewById(R.id.signUpPassword);
-        ET_confirmPassword = (EditText) findViewById(R.id.signUpConfirmPassword) ;
+        emailEditText = (EditText) findViewById(R.id.signUpEmail);
+        passwordEditText = (EditText) findViewById(R.id.signUpPassword);
+        confirmPasswordEditText = (EditText) findViewById(R.id.signUpConfirmPassword);
+        progressBar = (ProgressBar) findViewById(R.id.SignUpProgressBar);
 
         login = (Button) findViewById(R.id.signUpLogin_btn);
         SignUp = (Button) findViewById(R.id.signUp_btn);
@@ -62,6 +67,7 @@ public class SignUpActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if(IsCorrectFormat()) {
+                showProgressBar();
                 sendRequest();
             }else{
                 Toast.makeText(SignUpActivity.this,"Please Insect correct password",Toast.LENGTH_LONG)
@@ -71,10 +77,25 @@ public class SignUpActivity extends AppCompatActivity {
         }
     };
 
+    private void showProgressBar(){
+        progressBar.setVisibility(View.VISIBLE);
+
+        //Removing user interaction
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private void hideProgressBar(){
+        progressBar.setVisibility(View.GONE);
+
+        //Adding user interaction
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
     private boolean IsCorrectFormat(){
-        email = ET_email.getText().toString();
-        password =  ET_password.getText().toString();
-        confirmPassword = ET_confirmPassword.getText().toString();
+        email = emailEditText.getText().toString();
+        password =  passwordEditText.getText().toString();
+        confirmPassword = confirmPasswordEditText.getText().toString();
         if(isEmailValid(email) && isPasswordValid(password) && isConfirmPasswordMatch(confirmPassword)){
                 return true;
         }
@@ -92,7 +113,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private boolean isPasswordValid(String password){
         boolean s = password.matches(PASSWORD_PATTERN);
-        if(!s)Toast.makeText(SignUpActivity.this,"wrong password",Toast.LENGTH_LONG).show();
+        if(!s)Toast.makeText(SignUpActivity.this,"password must be 8 character long with at least one special character and at least one capital character",Toast.LENGTH_LONG).show();
         return s;
     }
 
@@ -112,6 +133,7 @@ public class SignUpActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        hideProgressBar();
                         Intent loginIntent = new Intent(SignUpActivity.this,LoginActivity.class);
                         startActivity(loginIntent);
                         finish();
@@ -120,8 +142,8 @@ public class SignUpActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-                        Toast.makeText(SignUpActivity.this,"error in response",Toast.LENGTH_LONG).show();
+                        hideProgressBar();
+                        Toast.makeText(SignUpActivity.this,"Please Insect correct password or try again",Toast.LENGTH_LONG).show();
                     }
                 });
         stringRequest.setRetryPolicy(new RetryPolicy() {
