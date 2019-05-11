@@ -6,7 +6,7 @@ public class _User {
 
     public String getToken() {return Token;}
 
-    public void setToken(String token){Token = token;}
+    public static void setToken(String token){Token = token;}
 
     public static void setEmail(String email) {
         Email = email;
