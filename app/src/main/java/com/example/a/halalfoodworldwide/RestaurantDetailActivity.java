@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -38,6 +40,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
     private RatingBar rating;
     private Button direction;
     private ListView menuListView;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +69,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         rating = (RatingBar) findViewById(R.id.rrating);
         direction = (Button) findViewById(R.id.direction);
         menuListView = (ListView) findViewById(R.id.menulist);
-
+        progressBar = (ProgressBar) findViewById(R.id.RestaurantDetailProgressBar);
 
         //Setting Layout values
         rating.setRating((float)restaurantModel.rating);
@@ -75,6 +78,7 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
         //Getting all menu items from apis
         sendRequest();
+        showProgressBar();
 
         direction.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,19 +101,20 @@ public class RestaurantDetailActivity extends AppCompatActivity {
 
     //Api request
     private void sendRequest(){
-        String url = APIUrl.Url+ "/api/Restaurant/7/MenuItem";
+        String url = APIUrl.Url+ "/api/Restaurant/"+restaurantModel.place_id+"/MenuItem";
         StringRequest stringRequest = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        hideProgressBar();
                         GetMenuItems(response);
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
-                        Toast.makeText(RestaurantDetailActivity.this,"error in response",Toast.LENGTH_LONG).show();
+                        hideProgressBar();
+                        Toast.makeText(RestaurantDetailActivity.this,"Something went wrong try again",Toast.LENGTH_LONG).show();
                     }
                 });
         stringRequest.setRetryPolicy(new RetryPolicy() {
@@ -153,5 +158,20 @@ public class RestaurantDetailActivity extends AppCompatActivity {
         }
 
         menuListView.setAdapter(adapter);
+    }
+
+    private void showProgressBar(){
+        progressBar.setVisibility(View.VISIBLE);
+
+        //Removing user interaction
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private void hideProgressBar(){
+        progressBar.setVisibility(View.GONE);
+
+        //Adding user interaction
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 }

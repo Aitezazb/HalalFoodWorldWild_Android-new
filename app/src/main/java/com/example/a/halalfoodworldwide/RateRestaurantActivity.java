@@ -26,13 +26,16 @@ import java.util.Map;
 
 public class RateRestaurantActivity extends AppCompatActivity {
 
-    private String id;
+    private String restaurantId;
     private String restaurantName;
 
     private TextView restaurantNameTextView;
     private Button submitBtn,HomeBtn;
     private EditText commentEditText;
     private RatingBar ratingBar;
+
+    String rating,comments;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +55,7 @@ public class RateRestaurantActivity extends AppCompatActivity {
         //Getting all restaurant details
         final Intent intent = getIntent();
         restaurantName = intent.getStringExtra("restaurantName");
-        restaurantName = intent.getStringExtra("restaurantId");
+        restaurantId = intent.getStringExtra("restaurantId");
 
         //Setting restaurant Name
         restaurantNameTextView.setText(restaurantName);
@@ -64,12 +67,14 @@ public class RateRestaurantActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if(UIFieldsNotEmpty()){
-
+                rating = String.valueOf(ratingBar.getRating());
+                comments = commentEditText.getText().toString();
+                sendRequest();
             }
             else{
                 Toast.makeText(getApplicationContext(),"please fill the form",Toast.LENGTH_LONG).show();
             }
-            sendRequest();
+
         }
     };
 
@@ -87,12 +92,11 @@ public class RateRestaurantActivity extends AppCompatActivity {
 
     //Api request
     private void sendRequest(){
-        String url = APIUrl.Url + "/api/Ratings?restaurantId=2&restaurantName=lolol&star=4&comment=this is good&userEmail=aitezazbilal95@gmail.com";
+        String url = APIUrl.Url + "/api/Ratings?restaurantId="+restaurantId+"&restaurantName="+restaurantName+"&star="+rating+"&comment="+comments+"&userEmail="+_User.getEmail();
         StringRequest stringRequest = new StringRequest(Request.Method.POST,url
                 , new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
                     Intent mainActivityIntent = new Intent(RateRestaurantActivity.this,MainActivity.class);
                     startActivity(mainActivityIntent);
                     finish();
@@ -102,7 +106,7 @@ public class RateRestaurantActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
 
-                        Toast.makeText(RateRestaurantActivity.this,"error in response",Toast.LENGTH_LONG).show();
+                        Toast.makeText(RateRestaurantActivity.this,"Something went wrong please try again",Toast.LENGTH_LONG).show();
                     }
                 })
         {
