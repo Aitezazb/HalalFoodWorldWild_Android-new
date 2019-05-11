@@ -7,6 +7,14 @@
     android:layout_height="match_parent"
     tools:context=".UserAllRatingActivity">
 
+    <ProgressBar
+        android:id="@+id/UserAllRatingProgressBar"
+        android:visibility="gone"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        />
+
     <ListView
         android:layout_marginLeft="10dp"
         android:layout_marginRight="15dp"

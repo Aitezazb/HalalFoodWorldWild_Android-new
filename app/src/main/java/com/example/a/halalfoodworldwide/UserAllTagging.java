@@ -7,9 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -35,6 +37,8 @@ import java.util.Map;
 public class UserAllTagging extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     ListView taggingListView;
+    private ProgressBar progressBar;
+
 
     ArrayList<TaggedRestaurants> taggedRestaurantsArrayList;
 
@@ -49,7 +53,10 @@ public class UserAllTagging extends AppCompatActivity {
         //Getting references
         taggingListView = (ListView) findViewById(R.id.TagListView);
         tagNewRestaurant = (Button) findViewById(R.id.TagNewRestaurantViewButton);
+        progressBar = (ProgressBar) findViewById(R.id.UserAllTaggingProgressBar);
+
         tagNewRestaurant.setOnClickListener(tagNewRestaurantViewButtonListener);
+
 
         //bottom menu
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomMenu);
@@ -61,6 +68,7 @@ public class UserAllTagging extends AppCompatActivity {
 
         //Get all the tagged restaurant.
         sendRequest();
+        showProgressBar();
     }
 
     View.OnClickListener tagNewRestaurantViewButtonListener = new View.OnClickListener() {
@@ -73,14 +81,13 @@ public class UserAllTagging extends AppCompatActivity {
 
     //Api request
     private void sendRequest(){
-        String url = APIUrl.Url + "/api/TaggedPlaces?email=aitezazbilal95@gmail.com";
+        String url = APIUrl.Url + "/api/TaggedPlaces?email="+_User.getEmail();
         StringRequest stringRequest = new StringRequest(Request.Method.GET,url
                 , new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 ResponseToModel(response);
-
-
+                hideProgressBar();
                 final TaggedRestaurantAdapter taggedRestaurantAdapter = new TaggedRestaurantAdapter(UserAllTagging.this,taggedRestaurantsArrayList);
 
                 taggingListView.setAdapter(taggedRestaurantAdapter);
@@ -100,7 +107,7 @@ public class UserAllTagging extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        hideProgressBar();
                         Toast.makeText(getApplicationContext(),"error in response",Toast.LENGTH_LONG).show();
                     }
                 })
@@ -227,4 +234,19 @@ public class UserAllTagging extends AppCompatActivity {
             return true;
         }
     };
+
+    private void showProgressBar(){
+        progressBar.setVisibility(View.VISIBLE);
+
+        //Removing user interaction
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private void hideProgressBar(){
+        progressBar.setVisibility(View.GONE);
+
+        //Adding user interaction
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
 }

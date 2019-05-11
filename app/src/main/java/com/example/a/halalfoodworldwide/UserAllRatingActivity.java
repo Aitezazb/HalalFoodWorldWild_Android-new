@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -35,6 +37,7 @@ public class UserAllRatingActivity extends AppCompatActivity {
     //UI
     private ListView ratingListView;
     private BottomNavigationView bottomNavigationView;
+    private ProgressBar progressBar;
 
     //Model
     private ArrayList<RatingListViewModel> ratingListViewModels;
@@ -48,6 +51,7 @@ public class UserAllRatingActivity extends AppCompatActivity {
         //Getting references
         ratingListView = (ListView) findViewById(R.id.RatingListView);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomMenu);
+        progressBar = (ProgressBar) findViewById(R.id.UserAllRatingProgressBar);
 
         //Adding click listener
         bottomNavigationView.setOnNavigationItemSelectedListener(nav_Listener);
@@ -57,18 +61,34 @@ public class UserAllRatingActivity extends AppCompatActivity {
 
         //Api request to get All ratings
         sendRequest();
-
+        showProgressBar();
 
 
     }
+
+    private void showProgressBar(){
+        progressBar.setVisibility(View.VISIBLE);
+
+        //Removing user interaction
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+
+    private void hideProgressBar(){
+        progressBar.setVisibility(View.GONE);
+
+        //Adding user interaction
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
     //Api request
     private void sendRequest(){
-        String url = APIUrl.Url + "/api/Ratings?userEmail=aitezazbilal95@gmail.com";
+        String url = APIUrl.Url + "/api/Ratings?userEmail="+_User.getEmail();
         StringRequest stringRequest = new StringRequest(Request.Method.GET,url
                 , new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 ResponseToModel(response);
+                hideProgressBar();
                 //RatingItemAdapter ratingItemAdapter = new RatingItemAdapter(this,restaurantName,rating);
 
                 final RatingItemAdapter ratingItemAdapter = new RatingItemAdapter(UserAllRatingActivity.this,ratingListViewModels);
@@ -90,7 +110,7 @@ public class UserAllRatingActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        hideProgressBar();
                         Toast.makeText(getApplicationContext(),"error in response",Toast.LENGTH_LONG).show();
                     }
                 })
