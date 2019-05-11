@@ -77,6 +77,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
     };
 
+    //Hide or show bar and enable or disable user interactive
     private void showProgressBar(){
         progressBar.setVisibility(View.VISIBLE);
 
@@ -84,7 +85,6 @@ public class SignUpActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
-
     private void hideProgressBar(){
         progressBar.setVisibility(View.GONE);
 
@@ -92,6 +92,7 @@ public class SignUpActivity extends AppCompatActivity {
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
+    //Checking if every UI field is correct
     private boolean IsCorrectFormat(){
         email = emailEditText.getText().toString();
         password =  passwordEditText.getText().toString();
@@ -102,6 +103,7 @@ public class SignUpActivity extends AppCompatActivity {
         return false;
     }
 
+    //Checking if email matches the email pattern
      private boolean isEmailValid(CharSequence email) {
         boolean s = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
         if(!s)Toast.makeText(SignUpActivity.this,"wrong email",Toast.LENGTH_LONG)
@@ -111,12 +113,14 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
+    //Checking if password matches the password pattern
     private boolean isPasswordValid(String password){
         boolean s = password.matches(PASSWORD_PATTERN);
         if(!s)Toast.makeText(SignUpActivity.this,"password must be 8 character long with at least one special character and at least one capital character",Toast.LENGTH_LONG).show();
         return s;
     }
 
+    //Checking if confirm password matches the password
     private boolean isConfirmPasswordMatch(String confirmPassword){
         if (password.equals(confirmPassword)) {
             Toast.makeText(SignUpActivity.this,"wrong confirm",Toast.LENGTH_LONG).show();
@@ -164,5 +168,13 @@ public class SignUpActivity extends AppCompatActivity {
         });
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent mainActivity = new Intent(SignUpActivity.this,MainActivity.class);
+        startActivity(mainActivity);
+        finish();
     }
 }

@@ -249,4 +249,12 @@ public class UserAllTagging extends AppCompatActivity {
         //Adding user interaction
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent mainActivity = new Intent(UserAllTagging.this,MainActivity.class);
+        startActivity(mainActivity);
+        finish();
+    }
 }

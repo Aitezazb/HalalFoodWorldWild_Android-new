@@ -236,4 +236,12 @@ public class UserAllRatingActivity extends AppCompatActivity {
             return true;
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent mainActivity = new Intent(UserAllRatingActivity.this,MainActivity.class);
+        startActivity(mainActivity);
+        finish();
+    }
 }

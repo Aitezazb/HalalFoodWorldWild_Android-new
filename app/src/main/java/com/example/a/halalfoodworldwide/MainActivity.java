@@ -313,6 +313,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
     };
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
 }
 
 

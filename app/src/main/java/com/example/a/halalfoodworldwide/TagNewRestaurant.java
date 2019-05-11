@@ -227,5 +227,13 @@ public class TagNewRestaurant extends AppCompatActivity implements OnMapReadyCal
         requestQueue.add(stringRequest);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent mainActivity = new Intent(TagNewRestaurant.this,UserAllTagging.class);
+        startActivity(mainActivity);
+        finish();
+    }
+
 }
 

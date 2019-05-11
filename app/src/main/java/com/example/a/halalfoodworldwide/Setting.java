@@ -25,6 +25,7 @@ public class Setting extends AppCompatActivity {
     //Bottom menu
     BottomNavigationView bottomNavigationView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +40,10 @@ public class Setting extends AppCompatActivity {
         //bottom menu
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.SettingbottomMenu);
 
+        //Adding selected default item
+        bottomNavigationView.setSelectedItemId(R.id.nav_setting);
+
+        //Adding user email to UI field
         TextView email = (TextView) findViewById(R.id.SettingEmail);
 
         email.setText(_User.getEmail());
@@ -121,5 +126,11 @@ public class Setting extends AppCompatActivity {
             return true;
         }
     };
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent mainActivity = new Intent(Setting.this,MainActivity.class);
+        startActivity(mainActivity);
+        finish();
+    }
 }

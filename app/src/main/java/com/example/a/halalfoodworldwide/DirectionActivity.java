@@ -155,4 +155,12 @@ public class DirectionActivity extends FragmentActivity implements OnMapReadyCal
             finish();
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent mainActivity = new Intent(DirectionActivity.this,RestaurantDetailActivity.class);
+        startActivity(mainActivity);
+        finish();
+    }
 }

@@ -153,5 +153,11 @@ public class RateRestaurantActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent mainActivity = new Intent(RateRestaurantActivity.this,DirectionActivity.class);
+        startActivity(mainActivity);
+        finish();
+    }
 }

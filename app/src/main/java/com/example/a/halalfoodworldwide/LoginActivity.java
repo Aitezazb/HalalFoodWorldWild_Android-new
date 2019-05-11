@@ -197,4 +197,12 @@ public class LoginActivity extends AppCompatActivity {
         _User.getInstance().setEmail(email);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent mainActivity = new Intent(LoginActivity.this,MainActivity.class);
+        startActivity(mainActivity);
+        finish();
+    }
+
 }
