@@ -122,14 +122,14 @@ public class DirectionActivity extends FragmentActivity implements OnMapReadyCal
         Button Login = (Button) userLog_Popup.findViewById(R.id.login);
         Button SignUp = (Button) userLog_Popup.findViewById(R.id.signup);
         TextView closePopup = (TextView) userLog_Popup.findViewById(R.id.closepopup);
-        closePopup.setOnClickListener(closeBtnListenser);
+        closePopup.setOnClickListener(closeBanListener);
         Login.setOnClickListener(LoginBanListener);
         SignUp.setOnClickListener(SignUpBtnListener);
         userLog_Popup.show();
     }
 
     //close user log pop up event handler
-    private TextView.OnClickListener closeBtnListenser = new View.OnClickListener() {
+    private TextView.OnClickListener closeBanListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             userLog_Popup.dismiss();

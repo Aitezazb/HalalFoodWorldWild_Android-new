@@ -150,7 +150,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     //Api request
     private void sendRequest(){
-        String url = "";//APIUrl.Url + "/api/Restaurant?cityName=Lahore&countyName=Pakistan"; // <- uncomment this
+        String url = APIUrl.Url + "/api/Restaurant?cityName="+cityName+"&countyName="+countryName;
         StringRequest stringRequest = new StringRequest(url,
                 new Response.Listener<String>() {
                     @Override

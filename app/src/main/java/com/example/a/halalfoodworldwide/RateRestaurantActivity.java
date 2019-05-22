@@ -92,11 +92,16 @@ public class RateRestaurantActivity extends AppCompatActivity {
 
     //Api request
     private void sendRequest(){
+        restaurantName = restaurantName.replaceAll("\\s+","+");
+        float convertedStars = Float.parseFloat(rating);
+        int a = Math.round(convertedStars);
+        rating = String.valueOf(a);
         String url = APIUrl.Url + "/api/Ratings?restaurantId="+restaurantId+"&restaurantName="+restaurantName+"&star="+rating+"&comment="+comments+"&userEmail="+_User.getEmail();
         StringRequest stringRequest = new StringRequest(Request.Method.POST,url
                 , new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Toast.makeText(RateRestaurantActivity.this,"You have rated the restaurant",Toast.LENGTH_SHORT).show();
                     Intent mainActivityIntent = new Intent(RateRestaurantActivity.this,MainActivity.class);
                     startActivity(mainActivityIntent);
                     finish();
